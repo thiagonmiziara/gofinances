@@ -1,5 +1,4 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import * as S from "./styles";
 
@@ -19,6 +18,7 @@ export function Dashboard() {
               <S.UserName>Thiago</S.UserName>
             </S.User>
           </S.UserInfo>
+          <S.Icon name='power' />
         </S.UserWrapper>
       </S.Header>
     </S.Container>
