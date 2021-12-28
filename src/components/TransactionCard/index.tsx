@@ -7,14 +7,15 @@ interface CategoryProps {
   icon: string;
 }
 
-interface DataProps {
+export interface DataTransactionCardProps {
+  type: "positive" | "negative";
   title: string;
   amount: string;
   category: CategoryProps;
   date: string;
 }
 interface TransactionCardProps {
-  data: DataProps;
+  data: DataTransactionCardProps;
 }
 
 export function TransactionCard({ data }: TransactionCardProps) {
@@ -22,7 +23,10 @@ export function TransactionCard({ data }: TransactionCardProps) {
     <S.Container>
       <S.Title>{data.title}</S.Title>
 
-      <S.Amount>{data.amount}</S.Amount>
+      <S.Amount type={data.type}>
+        {data.type === "negative" && "- "}
+        {data.amount}
+      </S.Amount>
 
       <S.Footer>
         <S.Category>

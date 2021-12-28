@@ -1,12 +1,20 @@
 import React from "react";
-import { getBottomSpace } from "react-native-iphone-x-helper";
 import { HighlightCard } from "../../components/HighlightCard";
-import { TransactionCard } from "../../components/TransactionCard";
+import {
+  TransactionCard,
+  DataTransactionCardProps,
+} from "../../components/TransactionCard";
 import * as S from "./styles";
 
+export interface DataListProps extends DataTransactionCardProps {
+  id: string;
+}
+
 export function Dashboard() {
-  const data = [
+  const data: DataListProps[] = [
     {
+      id: "1",
+      type: "positive",
       title: "Thiago",
       amount: "R$ 1.500,00",
       category: {
@@ -16,20 +24,24 @@ export function Dashboard() {
       date: "15/03/1987",
     },
     {
-      title: "Thiago02",
+      id: "2",
+      type: "negative",
+      title: "Saida",
       amount: "R$ 1.500,00",
       category: {
         name: "Alimentação",
-        icon: "dollar-sign",
+        icon: "coffee",
       },
       date: "15/03/1987",
     },
     {
-      title: "Thiago03",
-      amount: "R$ 1.500,00",
+      id: "3",
+      type: "negative",
+      title: "Shopping",
+      amount: "R$ 500,00",
       category: {
-        name: "Alimentação",
-        icon: "dollar-sign",
+        name: "Compra",
+        icon: "shopping-bag",
       },
       date: "15/03/1987",
     },
@@ -79,9 +91,8 @@ export function Dashboard() {
         <S.Title>Listagem</S.Title>
         <S.TransactionList
           data={data}
+          keyExtractor={(item) => item.id}
           renderItem={({ item }) => <TransactionCard data={item} />}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: getBottomSpace() }}
         />
       </S.Transactions>
     </S.Container>
