@@ -8,9 +8,10 @@ import * as S from "./styles";
 interface InputFormProps extends TextInputProps {
   control: Control;
   name: string;
+  error: string;
 }
 
-export function InputForm({ control, name, ...rest }: InputFormProps) {
+export function InputForm({ control, name, error, ...rest }: InputFormProps) {
   return (
     <S.Container>
       <Controller
@@ -20,6 +21,7 @@ export function InputForm({ control, name, ...rest }: InputFormProps) {
         )}
         name={name}
       />
+      {error && <S.ErrorMessage>{error}</S.ErrorMessage>}
     </S.Container>
   );
 }
