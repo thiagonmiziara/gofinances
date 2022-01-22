@@ -62,7 +62,9 @@ export function Dashboard() {
               <S.UserName>Thiago</S.UserName>
             </S.User>
           </S.UserInfo>
-          <S.Icon name='power' />
+          <S.LogoutButton onPress={() => {}}>
+            <S.Icon name='power' />
+          </S.LogoutButton>
         </S.UserWrapper>
       </S.Header>
 
