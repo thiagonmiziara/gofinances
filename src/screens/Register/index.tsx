@@ -20,7 +20,8 @@ const YUP_SCHEMA = Yup.object().shape({
   name: Yup.string().required("O nome é obrigatório"),
   amount: Yup.number()
     .typeError("Informe um valor numérico")
-    .positive("O valor deve ser positivo"),
+    .positive("O valor deve ser positivo")
+    .required("O valor é obrigatório"),
 });
 
 export function Register() {
