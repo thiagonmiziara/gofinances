@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -31,6 +32,7 @@ export function Register() {
     key: "category",
     name: "Categoria",
   });
+  const dataKey = "@gofinances:transactions";
   const {
     control,
     handleSubmit,
@@ -52,7 +54,7 @@ export function Register() {
     setCategoryModalOpen(false);
   }
 
-  function handleSubmitRegister(form: FormData) {
+  async function handleSubmitRegister(form: FormData) {
     //validate transaction
     if (!transactionType) {
       return Alert.alert("Erro", "Selecione o tipo da transação");
@@ -68,8 +70,22 @@ export function Register() {
       transactionType,
       category: category.key,
     };
-    console.log(data);
+    //Armazenar no storage
+    try {
+      await AsyncStorage.setItem(dataKey, JSON.stringify(data));
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Erro", "Erro ao cadastrar transação");
+    }
   }
+
+  useEffect(() => {
+    async function loadData() {
+      const data = await AsyncStorage.getItem(dataKey);
+      console.log(JSON.parse(data!));
+    }
+    loadData();
+  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
