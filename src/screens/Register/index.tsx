@@ -64,7 +64,7 @@ export function Register() {
       return Alert.alert("Erro", "Selecione uma categoria");
     }
 
-    const data = {
+    const newTransaction = {
       name: form.name,
       amount: form.amount,
       transactionType,
@@ -72,7 +72,14 @@ export function Register() {
     };
     //Armazenar no storage
     try {
-      await AsyncStorage.setItem(dataKey, JSON.stringify(data));
+      //pegando dados do storage
+      const data = await AsyncStorage.getItem(dataKey);
+      //transformando em array
+      const currentData = data ? JSON.parse(data) : [];
+      //adicionando novo item
+      const dataFormated = [...currentData, newTransaction];
+
+      await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormated));
     } catch (error) {
       console.log(error);
       Alert.alert("Erro", "Erro ao cadastrar transação");
@@ -85,6 +92,11 @@ export function Register() {
       console.log(JSON.parse(data!));
     }
     loadData();
+    // //função para remover tudo do asycstorage
+    // async function removeAll() {
+    //   await AsyncStorage.removeItem(dataKey);
+    // }
+    // removeAll();
   }, []);
 
   return (
