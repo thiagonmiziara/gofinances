@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Modal, TouchableWithoutFeedback, Keyboard, Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import uuid from "react-native-uuid";
+
+import { useForm } from "react-hook-form";
+import { useNavigation } from "@react-navigation/native";
 
 import { Button } from "../../components/Form/Button";
 import { CategorySelectButton } from "../../components/Form/CategorySelectButton";
@@ -33,9 +36,11 @@ export function Register() {
     name: "Categoria",
   });
   const dataKey = "@gofinances:transactions";
+  const navigation = useNavigation();
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     //validationSchema: YUP_SCHEMA,
@@ -65,10 +70,12 @@ export function Register() {
     }
 
     const newTransaction = {
+      id: String(uuid.v4()),
       name: form.name,
       amount: form.amount,
       transactionType,
       category: category.key,
+      date: new Date(),
     };
     //Armazenar no storage
     try {
@@ -80,24 +87,20 @@ export function Register() {
       const dataFormated = [...currentData, newTransaction];
 
       await AsyncStorage.setItem(dataKey, JSON.stringify(dataFormated));
+      //Limpando os campos do formulário
+      reset(); //função do useForm para resetar os inputs do formulário
+      setTransactionType("");
+      setCategory({
+        key: "category",
+        name: "Categotia",
+      });
+      //Levando pra tela de listagem após cadastrar
+      navigation.navigate("Listagem");
     } catch (error) {
       console.log(error);
       Alert.alert("Erro", "Erro ao cadastrar transação");
     }
   }
-
-  useEffect(() => {
-    async function loadData() {
-      const data = await AsyncStorage.getItem(dataKey);
-      console.log(JSON.parse(data!));
-    }
-    loadData();
-    // //função para remover tudo do asycstorage
-    // async function removeAll() {
-    //   await AsyncStorage.removeItem(dataKey);
-    // }
-    // removeAll();
-  }, []);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
