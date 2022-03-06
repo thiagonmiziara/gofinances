@@ -46,9 +46,14 @@ export function Dashboard() {
 
   useEffect(() => {
     loadTransactions();
-  }, []);
+    // // função para remover tudo do asycstorage
+    // const dataKey = "@gofinances:transactions";
 
-  console.log(data);
+    // async function removeAll() {
+    //   await AsyncStorage.removeItem(dataKey);
+    // }
+    // removeAll();
+  }, []);
 
   return (
     <S.Container>
@@ -93,7 +98,9 @@ export function Dashboard() {
       </S.HighlightCards>
 
       <S.Transactions>
-        <S.Title>Listagem</S.Title>
+        <S.Title>
+          {!data?.length ? "Sem transações cadastradas!" : "Listagem"}
+        </S.Title>
         <S.TransactionList
           data={data}
           keyExtractor={(item) => item.id}
