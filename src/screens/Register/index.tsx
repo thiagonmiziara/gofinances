@@ -35,7 +35,7 @@ export function Register() {
     key: "category",
     name: "Categoria",
   });
-  const dataKey = "@gofinances:transactions";
+
   const navigation = useNavigation();
   const {
     control,
@@ -73,12 +73,15 @@ export function Register() {
       id: String(uuid.v4()),
       name: form.name,
       amount: form.amount,
-      transactionType,
+      type: transactionType,
       category: category.key,
       date: new Date(),
     };
     //Armazenar no storage
     try {
+      //key do storage
+      const dataKey = "@gofinances:transactions";
+
       //pegando dados do storage
       const data = await AsyncStorage.getItem(dataKey);
       //transformando em array

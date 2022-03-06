@@ -1,3 +1,7 @@
+import "react-native-gesture-handler";
+//instalação da lib se faz necessario pq o android nao  reconhece a função Intl nativa do js
+import "intl";
+import "intl/locale-data/jsonp/pt-BR";
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { ThemeProvider } from "styled-components/native";

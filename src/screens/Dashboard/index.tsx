@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { HighlightCard } from "../../components/HighlightCard";
 import {
   TransactionCard,
@@ -11,41 +13,42 @@ export interface DataListProps extends DataTransactionCardProps {
 }
 
 export function Dashboard() {
-  const data: DataListProps[] = [
-    {
-      id: "1",
-      type: "positive",
-      title: "Thiago",
-      amount: "R$ 1.500,00",
-      category: {
-        name: "Alimentação",
-        icon: "dollar-sign",
-      },
-      date: "15/03/1987",
-    },
-    {
-      id: "2",
-      type: "negative",
-      title: "Saida",
-      amount: "R$ 1.500,00",
-      category: {
-        name: "Alimentação",
-        icon: "coffee",
-      },
-      date: "15/03/1987",
-    },
-    {
-      id: "3",
-      type: "negative",
-      title: "Shopping",
-      amount: "R$ 500,00",
-      category: {
-        name: "Compra",
-        icon: "shopping-bag",
-      },
-      date: "15/03/1987",
-    },
-  ];
+  const [data, setData] = useState<DataListProps[]>();
+
+  async function loadTransactions() {
+    const dataKey = "@gofinances:transactions";
+    const response = await AsyncStorage.getItem(dataKey);
+    const transactions = response ? JSON.parse(response) : [];
+
+    const transactionsFormatted: DataListProps[] = transactions.map(
+      (transaction: DataListProps) => {
+        const amount = Number(transaction.amount).toLocaleString("pt-BR", {
+          style: "currency",
+          currency: "BRL",
+        });
+        const dateFormatted = Intl.DateTimeFormat("pt-BR", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "2-digit",
+        }).format(new Date(transaction.date));
+        return {
+          id: transaction.id,
+          name: transaction.name,
+          amount,
+          type: transaction.type,
+          date: dateFormatted,
+          category: transaction.category,
+        };
+      }
+    );
+    setData(transactionsFormatted);
+  }
+
+  useEffect(() => {
+    loadTransactions();
+  }, []);
+
+  console.log(data);
 
   return (
     <S.Container>
