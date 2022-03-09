@@ -4,7 +4,7 @@ import { categories } from "../../utils/categories";
 import * as S from "./styles";
 
 export interface DataTransactionCardProps {
-  type: "up" | "down";
+  type: "positive" | "negative";
   name: string;
   amount: string;
   category: string;
@@ -21,7 +21,7 @@ export function TransactionCard({ data }: TransactionCardProps) {
       <S.Title>{data.name}</S.Title>
 
       <S.Amount type={data.type}>
-        {data.type === "down" && "-"}
+        {data.type === "negative" && "-"}
         {data.amount}
       </S.Amount>
 

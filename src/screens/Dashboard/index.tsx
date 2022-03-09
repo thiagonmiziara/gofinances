@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useFocusEffect } from "@react-navigation/native";
 
 import { HighlightCard } from "../../components/HighlightCard";
 import {
@@ -48,12 +49,17 @@ export function Dashboard() {
     loadTransactions();
     // // função para remover tudo do asycstorage
     // const dataKey = "@gofinances:transactions";
-
     // async function removeAll() {
     //   await AsyncStorage.removeItem(dataKey);
     // }
     // removeAll();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadTransactions();
+    }, [])
+  );
 
   return (
     <S.Container>
